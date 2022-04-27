@@ -1,2 +1,2 @@
 # JWT-Auth-Project
-Familiarizing myself with auth
+Familiarizing myself with auth using JWTs
