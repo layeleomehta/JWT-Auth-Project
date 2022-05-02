@@ -2,6 +2,7 @@ const express = require("express");
 const pool = require('../db'); 
 const bcrypt = require ('bcrypt');
 const router = express.Router();
+const JWTGen = require("../utils/jwtGen"); 
 
 
 router.post("/register", async (req, res) => {
@@ -24,10 +25,11 @@ router.post("/register", async (req, res) => {
         let newUser = await pool.query( "INSERT INTO users (user_name, user_email, user_password) VALUES ($1, $2, $3) RETURNING *",
         [username, email, bcryptPassword]); 
 
-        console.log("New user inserted into db!", newUser); 
-
         // Step 5: Generate JWT
-        return res.send("Okie dokie")
+        const jwtToken = JWTGen(newUser.rows[0].user_id);
+        return res.json({ jwtToken });
+
+
     } catch (err) {
         console.log(err.message); 
         res.send(err.message); 
