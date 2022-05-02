@@ -37,4 +37,32 @@ router.post("/register", async (req, res) => {
     }
 }); 
 
+router.post("/login", async (req, res) => {
+    try {
+        // Step 1: Get contents of req body
+        const {email, password} = req.body;
+
+        // Step 2: Ensure user exists in database
+        const existingUser = await pool.query("SELECT * FROM users WHERE user_email = $1", [email]); 
+        if(existingUser.rows.length == 0){
+            return res.status(401).send("User doesn't exist!"); 
+        }
+
+        // Step 3: Compare password to one already in database
+        const isValidPassword = await bcrypt.compare(password, existingUser.rows[0].user_password); 
+
+        // Step 4: If passwords match, give the client the JWT
+        if(isValidPassword){
+            const jwtToken = JWTGen(existingUser.rows[0].user_id);
+            return res.json({ jwtToken });
+        } else {
+            return res.status(401).json("Hmm... this password doesn't match our records. Please try again!");
+        }
+        
+    } catch (err) {
+        console.log(err.message); 
+        res.send(err.message); 
+    }
+})
+
 module.exports = router; 
