@@ -3,9 +3,11 @@ const pool = require('../db');
 const bcrypt = require ('bcrypt');
 const router = express.Router();
 const JWTGen = require("../utils/jwtGen"); 
+const validInfo = require("../middleware/validInfo"); 
+const authorize = require("../middleware/authorized"); 
 
 
-router.post("/register", async (req, res) => {
+router.post("/register", validInfo, async (req, res) => {
     try {
         // Step 1: Get the contents of the request body
         const {username, email, password} = req.body; 
@@ -28,8 +30,6 @@ router.post("/register", async (req, res) => {
         // Step 5: Generate JWT
         const jwtToken = JWTGen(newUser.rows[0].user_id);
         return res.json({ jwtToken });
-
-
     } catch (err) {
         console.log(err.message); 
         res.send(err.message); 
@@ -37,7 +37,7 @@ router.post("/register", async (req, res) => {
     }
 }); 
 
-router.post("/login", async (req, res) => {
+router.post("/login", validInfo, async (req, res) => {
     try {
         // Step 1: Get contents of req body
         const {email, password} = req.body;
@@ -63,6 +63,15 @@ router.post("/login", async (req, res) => {
         console.log(err.message); 
         res.send(err.message); 
     }
-})
+}); 
+
+router.post("/verify", authorize, (req, res) => {
+    try {
+      res.json(true);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server error");
+    }
+  });
 
 module.exports = router; 
