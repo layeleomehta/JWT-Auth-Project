@@ -32,9 +32,7 @@ function Login({setAuth}) {
       ); 
 
       const parseRes = await response.json(); 
-      console.log(parseRes); 
       if(parseRes.jwtToken){
-        console.log("Yo wagwan")
         setAuth(true);
         localStorage.setItem("token", parseRes.jwtToken); 
       } else{
