@@ -1,4 +1,4 @@
-import React, {Fragment, useState} from 'react';
+import React, {Fragment, useState, useEffect} from 'react';
 import './App.css';
 import {
   BrowserRouter, 
@@ -18,6 +18,25 @@ function App() {
     setisAuth(bool); 
   }; 
 
+  const checkAuth = async () => {
+    try {
+      const response = fetch("http://localhost:4000/authentication/verify", {
+        method: "GET", 
+        headers: {"token": localStorage.token}
+      }); 
+
+      const parseRes = await response.json(); 
+      
+      parseRes === true ? setAuth(true) : setAuth(false); 
+    } catch (err) {
+      console.error(err.message); 
+    }
+  }
+
+  useEffect(() => {
+    checkAuth(); 
+  },[])
+  
   return (
     <Fragment>
       <BrowserRouter>
