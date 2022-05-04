@@ -20,7 +20,7 @@ function App() {
 
   const checkAuth = async () => {
     try {
-      const response = fetch("http://localhost:4000/authentication/verify", {
+      const response = await fetch("http://localhost:4000/authentication/verify", {
         method: "GET", 
         headers: {"token": localStorage.token}
       }); 
@@ -35,7 +35,7 @@ function App() {
 
   useEffect(() => {
     checkAuth(); 
-  },[])
+  })
   
   return (
     <Fragment>
