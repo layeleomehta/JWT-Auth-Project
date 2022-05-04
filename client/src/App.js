@@ -6,6 +6,8 @@ import {
   Route,
   Navigate,  
 } from "react-router-dom"; 
+import { ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
@@ -48,7 +50,7 @@ function App() {
           </Routes>
         </div>
       </BrowserRouter>
-      
+      <ToastContainer/>
     </Fragment>
   );
 }

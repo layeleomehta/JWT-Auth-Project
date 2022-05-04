@@ -1,5 +1,6 @@
 import React, {Fragment, useState} from 'react'
 import {useNavigate} from 'react-router-dom'; 
+import { toast } from 'react-toastify';
 
 function Login({setAuth}) {
   let navigate = useNavigate(); 
@@ -35,8 +36,10 @@ function Login({setAuth}) {
       if(parseRes.jwtToken){
         setAuth(true);
         localStorage.setItem("token", parseRes.jwtToken); 
+        toast.success("You have logged in!")
       } else{
         setAuth(false); 
+        toast.error(parseRes)
       }
 
     } catch (err) {
